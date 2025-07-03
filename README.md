@@ -147,7 +147,3 @@ Navigate to: `http://127.0.0.1:5000` to view experiment tracking results.
 
 **Shubham Pandey**
 GitHub: [@shubhampandey97](https://github.com/shubhsmpandey97)
-
----
-
-Would you like this file uploaded into your folder structure as `README.md` when tools are available? Or generate `requirements.txt` next?
