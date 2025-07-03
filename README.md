@@ -143,20 +143,10 @@ Navigate to: `http://127.0.0.1:5000` to view experiment tracking results.
 
 ---
 
-## 📤 Deployment (Streamlit Cloud)
-
-1. Push this repo to GitHub
-2. Visit [Streamlit Cloud](https://share.streamlit.io/)
-3. Connect GitHub → Select this repo
-4. Set `app/streamlit_app.py` as entry point
-5. Done! Share your URL
-
----
-
 ## 👨‍💻 Author
 
 **Shubham Pandey**
-GitHub: [@your-username](https://github.com/your-username)
+GitHub: [@shubhampandey97](https://github.com/shubhsmpandey97)
 
 ---
 
