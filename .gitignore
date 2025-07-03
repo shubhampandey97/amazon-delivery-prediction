@@ -1,0 +1,7 @@
+__pycache__/
+*.pkl
+*.pyc
+mlruns/
+data/*.csv
+.env
+.ipynb_checkpoints/
