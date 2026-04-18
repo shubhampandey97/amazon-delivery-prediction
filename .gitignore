@@ -1,7 +1,31 @@
+# Python
 __pycache__/
-*.pkl
 *.pyc
+*.pyo
+*.pyd
+*.pkl
+*.joblib
+
 mlruns/
+
+# Data
 data/*.csv
+
+# Environment
+ama_del_t_pred_env/
 .env
+venv/
+env/
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

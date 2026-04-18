@@ -1,149 +1,112 @@
----
+# 🚚 Amazon Delivery Time Prediction
 
-## 📦 Amazon Delivery Time Prediction
+## 📌 Overview
 
-This project predicts delivery time for Amazon-style e-commerce orders using machine learning models based on product, agent, and environmental conditions.
----
-
-### 🚀 Live Demo (Optional)
-
-If deployed:
-
-> 🔗 [Streamlit App Demo](----)
+This project focuses on predicting **Amazon delivery time** using Machine Learning. It demonstrates an end-to-end ML workflow — from data preprocessing and model training (in Jupyter Notebook) to deployment using a **Streamlit web application**.
 
 ---
 
-## 📌 Project Overview
+## 🎯 Objective
 
-* **Objective**: Predict delivery time using features like distance, traffic, weather, etc.
-* **Domain**: E-commerce & Logistics
-* **Tech Stack**: Python, Pandas, Scikit-learn, MLflow, Streamlit, Geopy
+To build a predictive model that estimates delivery time based on various input features such as order details, location, and logistics-related factors.
 
 ---
 
-## 🔍 Features
+## 🧠 Tech Stack
 
-* Data Cleaning & Feature Engineering
-* Exploratory Data Analysis (EDA)
-* Multiple regression models:
-
-  * Linear Regression
-  * Random Forest
-  * Gradient Boosting
-* MLflow for model tracking
-* Streamlit UI for real-time predictions
-* Distance calculation using geospatial coordinates
+* **Python**
+* **Pandas, NumPy** – Data manipulation
+* **Scikit-learn** – Model building
+* **Joblib / Pickle** – Model serialization
+* **Streamlit** – Deployment (UI)
+* **MLflow** - Experiment tracking
 
 ---
 
-## 🧾 Dataset Description
-
-File: `amazon_delivery.csv`
-
-| Feature            | Description                                      |
-| ------------------ | ------------------------------------------------ |
-| Agent\_Age         | Age of delivery agent                            |
-| Agent\_Rating      | Rating of agent (1.0 to 5.0)                     |
-| Store/Drop Lat/Lon | Geolocation for pickup and delivery              |
-| Order/Pickup Time  | Timestamps for order and pickup                  |
-| Weather, Traffic   | Environmental conditions                         |
-| Vehicle, Area      | Delivery mode and zone                           |
-| Category           | Product category                                 |
-| Delivery\_Time     | Target variable – actual delivery time (minutes) |
-
----
-
-## 🏗 Project Structure
+## 📂 Project Structure
 
 ```
 amazon-delivery-prediction/
 │
-├── app/                      # Streamlit UI
-│   ├── streamlit_app.py
-|   ├── best_model_streamlit_app.py
-|   └── multi_model_streamlit_app.py
+├── data/
+│   ├── raw/                  # Raw dataset
+│   └── processed/            # Cleaned dataset
 │
-├── data/                     # Data files
-│   └── amazon_delivery_cleaned.csv
+├── notebooks/
+│   └── model_training.ipynb  # Initial model development
 │
-├── models/                   # Trained ML models
-|   ├── best_models.pkl
-│   ├── linear_regression_model.pkl
-│   ├── random_forest_model.pkl
-│   └── gradient_boosting_model.pkl
+├── models/
+│   └── model.pkl             # Trained model
 │
-├── notebooks/                # EDA and preprocessing notebooks
-│   ├── eda.ipynb
-│   ├── data_preprocessing.ipynb
-│   └── model_training.ipynb
+├── src/                      # (In progress)
+│   ├── train.py
+│   └── preprocess.py
 │
-├── scripts/                  # Model training scripts
-│   ├── train_linear_model.py
-│   ├── train_random_forest.py
-│   └── train_gradient_boosting.py
-│
+├── app.py                    # Streamlit application
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
 ---
 
-## ⚙️ How to Run Locally
+## ⚙️ Workflow
 
-1. **Clone the repository**
+### 1. Data Preprocessing
+
+* Handling missing values
+* Encoding categorical variables
+* Feature scaling
+
+### 2. Model Training
+
+* Model trained using **Scikit-learn**
+* Initial experimentation done in Jupyter Notebook
+* Performance evaluated using:
+
+  * MAE (Mean Absolute Error)
+  * RMSE (Root Mean Squared Error)
+  * R² Score
+
+### 3. Model Saving
+
+* Final model saved as `.pkl` file using `joblib`
+
+### 4. Deployment (Streamlit)
+
+* Interactive UI built using Streamlit
+* Users can input features and get delivery time predictions
+
+---
+
+## 🚀 How to Run the Project
+
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/amazon-delivery-prediction.git
+git clone https://github.com/shubhampandey97/amazon-delivery-prediction.git
 cd amazon-delivery-prediction
 ```
 
-2. **Create and activate a virtual environment**
-
-```bash
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\\Scripts\\activate
-```
-
-3. **Install dependencies**
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Run the Streamlit App**
+### 3. Run Streamlit App
 
 ```bash
-streamlit run app/streamlit_app.py
+streamlit run app.py
 ```
 
 ---
 
-## 📊 MLflow Tracking
+## 🔮 Future Improvements
 
-To start MLflow UI:
 
-```bash
-mlflow ui
-```
-
-Navigate to: `http://127.0.0.1:5000` to view experiment tracking results.
-
----
-
-## 📈 Model Evaluation Metrics
-
-| Model             | RMSE  | MAE   | R²   |
-| ----------------- | ----- | ----- | ---- |
-| Linear Regression | 21.54 | 17.62 | 0.72 |
-| Random Forest     | 14.89 | 11.65 | 0.85 |
-| Gradient Boosting | 13.42 | 10.98 | 0.88 |
-
-*(Example values – update with actuals)*
 
 ---
 
 ## 👨‍💻 Author
 
 **Shubham Pandey**
-GitHub: [@shubhampandey97](https://github.com/shubhsmpandey97)

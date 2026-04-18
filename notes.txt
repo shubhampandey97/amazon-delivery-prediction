@@ -1,0 +1,8 @@
+conda create --prefix "D:\Guvi\Projects\mini\Amazon Delivery Time Prediction\Amazon_delivery_time_prediction\ama_del_t_pred_env" python=3.10
+
+conda activate "D:\Guvi\Projects\mini\Amazon Delivery Time Prediction\Amazon_delivery_time_prediction\ama_del_t_pred_env"
+
+conda install pandas numpy matplotlib seaborn scikit-learn
+pip install mlflow streamlit geopy
+conda install ipykernel
+conda install fsspec
