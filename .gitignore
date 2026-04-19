@@ -4,11 +4,11 @@ __pycache__/
 *.pyo
 
 # Virtual Environment ama_del_t_pred_env
-ama_del_t_pred_env/
-
 env/
 venv/
 .venv/
+ama_del_t_pred_env/
+
 
 # Data files
 data/raw/
