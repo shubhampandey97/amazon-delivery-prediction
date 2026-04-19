@@ -200,6 +200,19 @@ streamlit run app/app.py
 
 ---
 
+## 🚀 Project Evolution
+
+| Version | Improvement | Impact |
+|--------|------------|--------|
+| v1.0 | Baseline model | Initial pipeline |
+| v1.1 | Feature engineering | Improved accuracy |
+| v1.2 | Pipeline + preprocessing | Scalability |
+| v1.3 | Hyperparameter tuning | Better performance |
+| v1.4 | Code cleanup | Maintainability |
+| v1.5 | Feature importance | Interpretability |
+
+---
+
 ## 🔮 Future Improvements
 
 * Add real-time traffic API integration

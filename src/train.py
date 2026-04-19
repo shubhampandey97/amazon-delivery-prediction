@@ -4,6 +4,8 @@ import mlflow.sklearn
 import joblib
 import os
 from pathlib import Path
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -22,6 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 data_path = BASE_DIR / "data" / "processed" / "final_data.csv"
 model_dir = BASE_DIR / "models"
+asset_dir = BASE_DIR / "assets"
+asset_dir.mkdir(exist_ok=True)
 
 # Create models folder if not exists
 model_dir.mkdir(exist_ok=True)
@@ -131,3 +135,15 @@ with mlflow.start_run():
     print(f"✅ Features saved at: {features_path}")
 
     print("Model trained and logged in MLflow")
+
+
+feature_names = best_model1.named_steps['preprocessor'].get_feature_names_out()
+importances = best_model1.named_steps['model'].feature_importances_
+
+indices = np.argsort(importances)[-10:]
+
+plt.figure(figsize=(10,6))
+plt.barh(range(len(indices)), importances[indices])
+plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
+plt.title("Feature Importance")
+plt.savefig(asset_dir / "feature_importance.png", bbox_inches='tight')
