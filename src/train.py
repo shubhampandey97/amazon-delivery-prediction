@@ -137,13 +137,13 @@ with mlflow.start_run():
     print("Model trained and logged in MLflow")
 
 
-feature_names = best_model1.named_steps['preprocessor'].get_feature_names_out()
-importances = best_model1.named_steps['model'].feature_importances_
+    feature_names = best_model.named_steps['preprocessor'].get_feature_names_out()
+    importances = best_model.named_steps['model'].feature_importances_
 
-indices = np.argsort(importances)[-10:]
+    indices = np.argsort(importances)[-10:]
 
-plt.figure(figsize=(10,6))
-plt.barh(range(len(indices)), importances[indices])
-plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
-plt.title("Feature Importance")
-plt.savefig(asset_dir / "feature_importance.png", bbox_inches='tight')
+    plt.figure(figsize=(10,6))
+    plt.barh(range(len(indices)), importances[indices])
+    plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
+    plt.title("Feature Importance")
+    plt.savefig(asset_dir / "feature_importance.png", bbox_inches='tight')

@@ -39,6 +39,7 @@ outputs/
 
 # Ignore temporary assets
 assets/*.png
+outputs/
 
 # BUT allow final images if needed
 !assets/final_*.png

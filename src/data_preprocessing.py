@@ -21,8 +21,6 @@ def clean_data(df):
     df['Weather'] = df['Weather'].str.strip().str.lower()
     df['Traffic'] = df['Traffic'].str.strip().str.lower()
 
-    df = remove_outliers(df, 'Delivery_Time')
-
     return df
 
 def remove_outliers(df, col):
@@ -37,7 +35,11 @@ def remove_outliers(df, col):
 
 if __name__ == "__main__":
     df = load_data(input_path)
+    
+    print(f"Before cleaning: {len(df)}")
     df = clean_data(df)
+    print(f"After cleaning: {len(df)}")
+
     df = remove_outliers(df, 'Delivery_Time')
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
