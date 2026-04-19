@@ -6,9 +6,12 @@ import os
 from pathlib import Path
 
 
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.ensemble import GradientBoostingRegressor
 
 mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("delivery_time_prediction")
@@ -23,25 +26,78 @@ model_dir.mkdir(exist_ok=True)
 
 df = pd.read_csv("data/processed/final_data.csv")
 
+# Drop unnecessary columns
+df = df.drop(columns=["Order_ID"], errors='ignore')
+
 # Select features
-features = ['Agent_Age', 'Agent_Rating', 'distance_km', 'weekday']
+# features = ['Agent_Age', 'Agent_Rating', 'distance_km', 'weekday']
 target = 'Delivery_Time'
 
-X = df[features]
+num_cols = [
+    'Agent_Age',
+    'Agent_Rating',
+    'distance_km',
+    'prep_time'
+]
+
+cat_cols = [
+    'Weather',
+    'Traffic',
+    'Vehicle',
+    'Area',
+    'Category'
+]
+
+# X = df[features]
+X = df[num_cols + cat_cols]
 y = df[target]
 
 # Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Preprocessing
+numeric_transformer = StandardScaler()
+
+categorical_transformer = OneHotEncoder(handle_unknown='ignore')
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, num_cols),
+        ('cat', categorical_transformer, cat_cols)
+    ]
+)
+
+# Model
+model = GradientBoostingRegressor()
+
+# Pipeline
+pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('model', model)
+])
+
+# Hyperparameter tuning
+param_grid = {
+    'model__n_estimators': [100, 200],
+    'model__learning_rate': [0.05, 0.1],
+    'model__max_depth': [3, 5]
+}
+
+grid_search = GridSearchCV(
+    pipeline,
+    param_grid,
+    cv=3,
+    scoring='neg_mean_squared_error',
+    n_jobs=-1
+)
 
 with mlflow.start_run():
 
-    model = RandomForestRegressor(
-        n_estimators=100,
-        random_state=42
-    )
-    model.fit(X_train, y_train)
+    grid_search.fit(X_train, y_train)
 
-    preds = model.predict(X_test)
+    best_model1 = grid_search.best_estimator_
+
+    preds = best_model1.predict(X_test)
 
     mae = mean_absolute_error(y_test, preds)
     # rmse = mean_squared_error(y_test, preds, squared=False)
@@ -54,13 +110,14 @@ with mlflow.start_run():
     mlflow.log_metric("R2", r2)
 
     # Log model to MLflow
-    mlflow.sklearn.log_model(model, "model")
+    mlflow.sklearn.log_model(best_model1, "model")
 
     # ALSO save locally (for Streamlit)
-    model_path = model_dir / "model.pkl"
+    model_path = model_dir / "best_model1.pkl"
     features_path = model_dir / "features.pkl"
 
-    joblib.dump(model, model_path)
+    joblib.dump(best_model1, model_path)
+    features = num_cols + cat_cols
     joblib.dump(features, features_path)
 
     print(f"✅ Model saved at: {model_path}")
