@@ -26,6 +26,7 @@ output_dir = BASE_DIR / "outputs"
 
 # Create models folder if not exists
 model_dir.mkdir(exist_ok=True)
+output_dir.mkdir(exist_ok=True)
 
 df = pd.read_csv("data/processed/final_data.csv")
 
@@ -128,25 +129,24 @@ with mlflow.start_run():
 
     print("Model trained and logged in MLflow")
 
-cv_scores = cross_val_score(
-    best_model1,
-    X,
-    y,
-    cv=5,
-    scoring='neg_mean_squared_error'
-)
+    cv_scores = cross_val_score(
+        best_model1,
+        X,
+        y,
+        cv=5,
+        scoring='neg_mean_squared_error'
+    )
 
-rmse_scores = np.sqrt(-cv_scores)
+    rmse_scores = np.sqrt(-cv_scores)
 
-print("CV RMSE:", rmse_scores)
-print("Mean RMSE:", rmse_scores.mean())
+    print("CV RMSE:", rmse_scores)
+    print("Mean RMSE:", rmse_scores.mean())
 
-# Save plot (IMPORTANT: use outputs folder)
-plt.figure(figsize=(8,5))
-plt.plot(rmse_scores, marker='o')
-plt.title("Cross Validation RMSE")
-plt.xlabel("Fold")
-plt.ylabel("RMSE")
-plt.grid()
+    plt.figure(figsize=(8,5))
+    plt.plot(rmse_scores, marker='o')
+    plt.title("Cross Validation RMSE")
+    plt.xlabel("Fold")
+    plt.ylabel("RMSE")
+    plt.grid()
 
-plt.savefig(output_dir / "cv_results.png", bbox_inches='tight')
+    plt.savefig(output_dir / "cv_results.png", bbox_inches='tight')
