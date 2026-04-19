@@ -188,20 +188,23 @@ with mlflow.start_run():
     # Transform data
     X_transformed = preprocessor.transform(X)
 
-    # Get feature names
+    if hasattr(X_transformed, "toarray"):
+        X_transformed = X_transformed.toarray()
+
     feature_names = preprocessor.get_feature_names_out()
 
-    # Convert to DataFrame (important for SHAP)
     X_transformed_df = pd.DataFrame(X_transformed, columns=feature_names)
 
-    # SHAP Explainer
-    explainer = shap.TreeExplainer(model)
+    # Sample for performance (VERY IMPORTANT)
+    X_sample = X_transformed_df.sample(200, random_state=42)
 
-    # Compute SHAP values
-    shap_values = explainer.shap_values(X_transformed_df)
+    # 🔥 KernelExplainer (FINAL FIX)
+    explainer = shap.KernelExplainer(model.predict, X_sample)
 
-    # Summary Plot
-    shap.summary_plot(shap_values, X_transformed_df, plot_type="bar", show=False)
-    # Save plot
+    shap_values = explainer.shap_values(X_sample)
+
+    # Plot
+    shap.summary_plot(shap_values, X_sample, show=False)
+
     plt.savefig(outputs_dir / "shap_summary.png", bbox_inches='tight')
     plt.close()
