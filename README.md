@@ -1,112 +1,219 @@
 # 🚚 Amazon Delivery Time Prediction
 
-## 📌 Overview
+## 📌 Project Overview
 
-This project focuses on predicting **Amazon delivery time** using Machine Learning. It demonstrates an end-to-end ML workflow — from data preprocessing and model training (in Jupyter Notebook) to deployment using a **Streamlit web application**.
+This project focuses on predicting **delivery time for e-commerce orders** using Machine Learning.
+It leverages real-world features such as **distance, traffic, weather, and agent performance** to build an accurate regression model.
 
----
+The final solution includes:
 
-## 🎯 Objective
-
-To build a predictive model that estimates delivery time based on various input features such as order details, location, and logistics-related factors.
-
----
-
-## 🧠 Tech Stack
-
-* **Python**
-* **Pandas, NumPy** – Data manipulation
-* **Scikit-learn** – Model building
-* **Joblib / Pickle** – Model serialization
-* **Streamlit** – Deployment (UI)
-* **MLflow** - Experiment tracking
+* Data preprocessing & feature engineering
+* Model training with MLflow tracking
+* A user-friendly **Streamlit web application**
 
 ---
 
-## 📂 Project Structure
+## 🎯 Business Objective
+
+* Improve delivery time estimation accuracy
+* Enhance customer satisfaction
+* Optimize logistics and delivery operations
+* Analyze impact of traffic, weather, and agent efficiency
+
+---
+
+## 🧠 Problem Statement
+
+Predict the **Delivery_Time (in hours)** based on:
+
+* Order details
+* Delivery agent attributes
+* External conditions (traffic, weather)
+* Geographical distance
+
+---
+
+## 🗂️ Project Structure
 
 ```
 amazon-delivery-prediction/
 │
 ├── data/
-│   ├── raw/                  # Raw dataset
-│   └── processed/            # Cleaned dataset
+│   ├── raw/
+│   └── processed/
 │
 ├── notebooks/
-│   └── model_training.ipynb  # Initial model development
+│   └── eda.ipynb
+│
+├── src/
+│   ├── data_preprocessing.py
+│   ├── feature_engineering.py
+│   ├── train.py
 │
 ├── models/
-│   └── model.pkl             # Trained model
+│   └── best_model.pkl
 │
-├── src/                      # (In progress)
-│   ├── train.py
-│   └── preprocess.py
+├── app/
+│   └── app.py
 │
-├── app.py                    # Streamlit application
+├── mlruns/        # MLflow logs
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## ⚙️ Workflow
+## ⚙️ Tech Stack
+
+* **Programming:** Python
+* **Libraries:** pandas, numpy, scikit-learn, xgboost
+* **Visualization:** matplotlib, seaborn
+* **Model Tracking:** MLflow
+* **Web App:** Streamlit
+
+---
+
+## 🔄 Workflow
 
 ### 1. Data Preprocessing
 
-* Handling missing values
-* Encoding categorical variables
-* Feature scaling
+* Removed duplicates & missing values
+* Standardized categorical variables
 
-### 2. Model Training
+### 2. Feature Engineering
 
-* Model trained using **Scikit-learn**
-* Initial experimentation done in Jupyter Notebook
-* Performance evaluated using:
+* 📍 **Distance Calculation (Haversine Formula)**
+* ⏱️ **Preparation Time (Order → Pickup)**
+* 📅 Time-based features (day, weekday)
+
+### 3. Exploratory Data Analysis (EDA)
+
+* Delivery time distribution
+* Distance vs delivery time relationship
+* Impact of traffic and weather
+
+### 4. Model Development
+
+* Built regression models:
+
+  * Gradient Boosting
+  * XGBoost (optional)
+* Used **Pipeline + ColumnTransformer**
+* Applied **GridSearchCV** for tuning
+
+### 5. Model Evaluation
+
+* Metrics used:
 
   * MAE (Mean Absolute Error)
   * RMSE (Root Mean Squared Error)
   * R² Score
 
-### 3. Model Saving
+### 6. Experiment Tracking
 
-* Final model saved as `.pkl` file using `joblib`
+* Used **MLflow** to:
 
-### 4. Deployment (Streamlit)
+  * Log metrics
+  * Compare models
+  * Track hyperparameters
 
-* Interactive UI built using Streamlit
-* Users can input features and get delivery time predictions
+### 7. Deployment
+
+* Built interactive UI using **Streamlit**
+* Users can input delivery conditions and get predictions
 
 ---
 
 ## 🚀 How to Run the Project
 
-### 1. Clone Repository
+### 1️⃣ Clone Repository
 
-```bash
-git clone https://github.com/shubhampandey97/amazon-delivery-prediction.git
+```
+git clone https://github.com/your-username/amazon-delivery-prediction.git
 cd amazon-delivery-prediction
 ```
 
-### 2. Install Dependencies
+### 2️⃣ Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
-### 3. Run Streamlit App
+### 3️⃣ Run Data Pipeline
 
-```bash
-streamlit run app.py
 ```
+python src/data_preprocessing.py
+python src/feature_engineering.py
+```
+
+### 4️⃣ Train Model
+
+```
+python src/train.py
+```
+
+### 5️⃣ Run MLflow
+
+```
+mlflow ui
+```
+
+### 6️⃣ Launch App
+
+```
+streamlit run app/app.py
+```
+
+---
+
+## 📊 Key Features
+
+* ✅ End-to-end ML pipeline
+* ✅ Feature engineering using geospatial data
+* ✅ Automated preprocessing with Pipeline
+* ✅ Hyperparameter tuning (GridSearchCV)
+* ✅ MLflow experiment tracking
+* ✅ Interactive Streamlit UI
+
+---
+
+## 📈 Sample Input Features
+
+* Agent Age & Rating
+* Distance (calculated from coordinates)
+* Preparation Time
+* Weather Conditions
+* Traffic Level
+* Vehicle Type
+* Area Type
+
+---
+
+## 🧪 Results
+
+* Built multiple regression models and compared performance
+* Identified key factors affecting delivery time:
+
+  * Distance
+  * Traffic conditions
+  * Preparation time
 
 ---
 
 ## 🔮 Future Improvements
 
-
+* Add real-time traffic API integration
+* Deploy on cloud (AWS / GCP)
+* Add SHAP for model explainability
+* Convert to REST API using FastAPI
 
 ---
 
 ## 👨‍💻 Author
 
 **Shubham Pandey**
+Data Science & ML Developer
+
+---
+
+## ⭐ If you found this project useful, consider giving it a star!
