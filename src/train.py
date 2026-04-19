@@ -10,8 +10,10 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, root_mean_squared_error
 from sklearn.ensemble import GradientBoostingRegressor
+from xgboost import XGBRegressor
+
 
 mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("delivery_time_prediction")
@@ -24,7 +26,7 @@ model_dir = BASE_DIR / "models"
 # Create models folder if not exists
 model_dir.mkdir(exist_ok=True)
 
-df = pd.read_csv("data/processed/final_data.csv")
+df = pd.read_csv(data_path)
 
 # Drop unnecessary columns
 df = df.drop(columns=["Order_ID"], errors='ignore')
@@ -68,7 +70,12 @@ preprocessor = ColumnTransformer(
 )
 
 # Model
-model = GradientBoostingRegressor()
+# model = GradientBoostingRegressor()
+model = XGBRegressor(
+    n_estimators=300,
+    learning_rate=0.05,
+    max_depth=6
+)
 
 # Pipeline
 pipeline = Pipeline(steps=[
@@ -95,13 +102,13 @@ with mlflow.start_run():
 
     grid_search.fit(X_train, y_train)
 
-    best_model1 = grid_search.best_estimator_
+    best_model = grid_search.best_estimator_
 
-    preds = best_model1.predict(X_test)
+    preds = best_model.predict(X_test)
 
     mae = mean_absolute_error(y_test, preds)
     # rmse = mean_squared_error(y_test, preds, squared=False)
-    rmse = mean_squared_error(y_test, preds)
+    rmse = root_mean_squared_error(y_test, preds)
     r2 = r2_score(y_test, preds)
 
     # Log metrics
@@ -110,13 +117,13 @@ with mlflow.start_run():
     mlflow.log_metric("R2", r2)
 
     # Log model to MLflow
-    mlflow.sklearn.log_model(best_model1, "model")
+    mlflow.sklearn.log_model(best_model, "model")
 
     # ALSO save locally (for Streamlit)
-    model_path = model_dir / "best_model1.pkl"
+    model_path = model_dir / "best_model.pkl"
     features_path = model_dir / "features.pkl"
 
-    joblib.dump(best_model1, model_path)
+    joblib.dump(best_model, model_path)
     features = num_cols + cat_cols
     joblib.dump(features, features_path)
 

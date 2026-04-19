@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # go up one level
-model_path = os.path.join(BASE_DIR, "models", "best_model1.pkl")
+model_path = os.path.join(BASE_DIR, "models", "best_model.pkl")
 
 model = joblib.load(model_path)
 
@@ -38,4 +38,4 @@ if st.button("Predict"):
     }])
     prediction = model.predict(input_df)
 
-    st.success(f"Estimated Delivery Time: {prediction[0]:.2f} hours")
+    st.success(f"Estimated Delivery Time: {prediction[0]:.2f} minutes")
