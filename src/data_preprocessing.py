@@ -23,9 +23,20 @@ def clean_data(df):
 
     return df
 
+def remove_outliers(df, col):
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+
+    return df[(df[col] >= lower) & (df[col] <= upper)]
+
 if __name__ == "__main__":
     df = load_data(input_path)
     df = clean_data(df)
+    df = remove_outliers(df, 'Delivery_Time')
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
