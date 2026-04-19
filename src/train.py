@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 data_path = BASE_DIR / "data" / "processed" / "final_data.csv"
 model_dir = BASE_DIR / "models"
-asset_dir = BASE_DIR / "assets"
-asset_dir.mkdir(exist_ok=True)
+outputs_dir = BASE_DIR / "assets"
+outputs_dir.mkdir(exist_ok=True)
 
 # Create models folder if not exists
 model_dir.mkdir(exist_ok=True)
@@ -146,4 +146,6 @@ with mlflow.start_run():
     plt.barh(range(len(indices)), importances[indices])
     plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
     plt.title("Feature Importance")
-    plt.savefig(asset_dir / "feature_importance.png", bbox_inches='tight')
+    plt.savefig(outputs_dir / "feature_importance.png", bbox_inches='tight')
+
+    print("Feature Impotance plot is added.")
