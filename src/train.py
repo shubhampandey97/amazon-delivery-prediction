@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -140,3 +140,31 @@ plt.barh(range(len(indices)), importances[indices])
 plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
 plt.title("Feature Importance")
 plt.savefig(asset_dir / "feature_importance.png", bbox_inches='tight')
+
+print("Important Features plot is saved.")
+
+
+cv_scores = cross_val_score(
+    best_model1,
+    X,
+    y,
+    cv=5,
+    scoring='neg_mean_squared_error'
+)
+
+rmse_scores = np.sqrt(-cv_scores)
+
+print("CV RMSE:", rmse_scores)
+print("Mean RMSE:", rmse_scores.mean())
+
+# Plot
+plt.figure(figsize=(8,5))
+plt.plot(rmse_scores, marker='o')
+plt.title("Cross Validation RMSE")
+plt.xlabel("Fold")
+plt.ylabel("RMSE")
+plt.grid()
+
+plt.savefig(asset_dir / "cv_results.png", bbox_inches='tight')
+
+print("Cross Validation RMSE is plotted.")
