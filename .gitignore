@@ -9,7 +9,8 @@ __pycache__/
 mlruns/
 
 # Data
-data/*.csv
+data/
+*.csv
 
 # Environment
 ama_del_t_pred_env/
