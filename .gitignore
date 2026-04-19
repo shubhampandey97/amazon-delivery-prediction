@@ -2,31 +2,41 @@
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
-*.pkl
-*.joblib
 
-mlruns/
-
-# Data
-data/
-*.csv
-
-# Environment
-ama_del_t_pred_env/
-.env
-venv/
+# Virtual Environment
 env/
+venv/
+.venv/
+
+# Data files
+data/raw/
+data/processed/
+
+# Models
+models/*.pkl
+
+# MLflow
+mlruns/
 
 # Jupyter
 .ipynb_checkpoints/
 
+# OS files
+.DS_Store
+Thumbs.db
+
 # Logs
 *.log
 
-# VS Code
-.vscode/
+# =========================
+# GENERATED OUTPUTS (IMPORTANT)
+# =========================
 
-# OS
-.DS_Store
-Thumbs.db
+# Ignore all generated plots
+outputs/
+
+# Ignore temporary assets
+assets/*.png
+
+# BUT allow final images if needed
+!assets/final_*.png
