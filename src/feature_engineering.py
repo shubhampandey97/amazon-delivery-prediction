@@ -35,6 +35,11 @@ def create_features(df):
     df['day'] = df['Order_Date'].dt.day
     df['month'] = df['Order_Date'].dt.month
     df['weekday'] = df['Order_Date'].dt.weekday
+    
+    # Order preparation time
+    df['Order_Time'] = pd.to_datetime(df['Order_Time'])
+    df['Pickup_Time'] = pd.to_datetime(df['Pickup_Time'])
+    df['prep_time'] = (df['Pickup_Time'] - df['Order_Time']).dt.total_seconds() / 60
 
     return df
 
