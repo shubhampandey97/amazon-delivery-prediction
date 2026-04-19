@@ -15,6 +15,8 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, root_mean_squared_error
 from sklearn.ensemble import GradientBoostingRegressor
 from xgboost import XGBRegressor
+import shap
+
 
 
 mlflow.set_tracking_uri("file:./mlruns")
@@ -176,4 +178,30 @@ with mlflow.start_run():
     plt.grid()
 
     plt.savefig(outputs_dir / "cv_results.png", bbox_inches='tight')
+    plt.close()
+
+
+    # Extract components
+    preprocessor = best_model.named_steps['preprocessor']
+    model = best_model.named_steps['model']
+
+    # Transform data
+    X_transformed = preprocessor.transform(X)
+
+    # Get feature names
+    feature_names = preprocessor.get_feature_names_out()
+
+    # Convert to DataFrame (important for SHAP)
+    X_transformed_df = pd.DataFrame(X_transformed, columns=feature_names)
+
+    # SHAP Explainer
+    explainer = shap.TreeExplainer(model)
+
+    # Compute SHAP values
+    shap_values = explainer.shap_values(X_transformed_df)
+
+    # Summary Plot
+    shap.summary_plot(shap_values, X_transformed_df, plot_type="bar", show=False)
+    # Save plot
+    plt.savefig(outputs_dir / "shap_summary.png", bbox_inches='tight')
     plt.close()
