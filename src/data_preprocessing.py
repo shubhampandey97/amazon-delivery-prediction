@@ -21,7 +21,19 @@ def clean_data(df):
     df['Weather'] = df['Weather'].str.strip().str.lower()
     df['Traffic'] = df['Traffic'].str.strip().str.lower()
 
+    df = remove_outliers(df, 'Delivery_Time')
+
     return df
+
+def remove_outliers(df, col):
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+
+    return df[(df[col] >= lower) & (df[col] <= upper)]
 
 if __name__ == "__main__":
     df = load_data(input_path)
