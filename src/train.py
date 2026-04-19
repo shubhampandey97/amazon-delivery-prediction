@@ -4,13 +4,15 @@ import mlflow.sklearn
 import joblib
 import os
 from pathlib import Path
+import numpy as np
+import matplotlib.pyplot as plt
 
 
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, root_mean_squared_error
 from sklearn.ensemble import GradientBoostingRegressor
 
 mlflow.set_tracking_uri("file:./mlruns")
@@ -20,9 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 data_path = BASE_DIR / "data" / "processed" / "final_data.csv"
 model_dir = BASE_DIR / "models"
+output_dir = BASE_DIR / "outputs"
 
 # Create models folder if not exists
 model_dir.mkdir(exist_ok=True)
+output_dir.mkdir(exist_ok=True)
 
 df = pd.read_csv("data/processed/final_data.csv")
 
@@ -101,7 +105,7 @@ with mlflow.start_run():
 
     mae = mean_absolute_error(y_test, preds)
     # rmse = mean_squared_error(y_test, preds, squared=False)
-    rmse = mean_squared_error(y_test, preds)
+    rmse = root_mean_squared_error(y_test, preds)
     r2 = r2_score(y_test, preds)
 
     # Log metrics
@@ -124,3 +128,25 @@ with mlflow.start_run():
     print(f"✅ Features saved at: {features_path}")
 
     print("Model trained and logged in MLflow")
+
+    cv_scores = cross_val_score(
+        best_model1,
+        X,
+        y,
+        cv=5,
+        scoring='neg_mean_squared_error'
+    )
+
+    rmse_scores = np.sqrt(-cv_scores)
+
+    print("CV RMSE:", rmse_scores)
+    print("Mean RMSE:", rmse_scores.mean())
+
+    plt.figure(figsize=(8,5))
+    plt.plot(rmse_scores, marker='o')
+    plt.title("Cross Validation RMSE")
+    plt.xlabel("Fold")
+    plt.ylabel("RMSE")
+    plt.grid()
+
+    plt.savefig(output_dir / "cv_results.png", bbox_inches='tight')
