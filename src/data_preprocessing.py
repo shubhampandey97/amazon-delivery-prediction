@@ -38,6 +38,7 @@ def remove_outliers(df, col):
 if __name__ == "__main__":
     df = load_data(input_path)
     df = clean_data(df)
+    df = remove_outliers(df, 'Delivery_Time')
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
