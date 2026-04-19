@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -149,3 +149,31 @@ with mlflow.start_run():
     plt.savefig(outputs_dir / "feature_importance.png", bbox_inches='tight')
 
     print("Feature Impotance plot is added.")
+
+    # Cross Validation
+    cv_scores = cross_val_score(
+        best_model,
+        X,
+        y,
+        cv=5,
+        scoring='neg_mean_squared_error'
+    )
+
+    rmse_scores = np.sqrt(-cv_scores)
+
+    print("CV RMSE Scores:", rmse_scores)
+    print("Mean CV RMSE:", rmse_scores.mean())
+
+    # Log in MLflow
+    mlflow.log_metric("CV_RMSE_MEAN", rmse_scores.mean())
+    mlflow.log_metric("CV_RMSE_STD", rmse_scores.std())
+
+    plt.figure(figsize=(8,5))
+    plt.plot(rmse_scores, marker='o')
+    plt.title("Cross Validation RMSE")
+    plt.xlabel("Fold")
+    plt.ylabel("RMSE")
+    plt.grid()
+
+    plt.savefig(outputs_dir / "cv_results.png", bbox_inches='tight')
+    plt.close()
