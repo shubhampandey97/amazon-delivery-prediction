@@ -1,5 +1,30 @@
 # 🚚 Amazon Delivery Time Prediction
 
+## 💡 Highlights
+
+- 🚀 End-to-end Machine Learning pipeline
+- 📊 XGBoost with hyperparameter tuning (GridSearchCV)
+- 🔁 5-fold cross-validation for robust evaluation
+- 📈 Feature importance visualization
+- 🔍 SHAP explainability for model interpretation
+- 📦 MLflow experiment tracking
+- 🌐 Interactive Streamlit web application
+  
+---
+
+## 📊 Model Performance
+
+- **Test RMSE:** ~22.3
+- **Cross-Validation RMSE (5-fold):** ~22.3 ± 0.18
+
+## 📊 Model Insights
+
+## 📈 Feature Importance
+![Feature Importance](assets/feature_importance.png)
+
+## 🔍 SHAP Explainability
+![SHAP Summary](assets/shap_summary.png)
+
 ## 📌 Project Overview
 
 This project focuses on predicting **delivery time for e-commerce orders** using Machine Learning.
@@ -9,6 +34,7 @@ The final solution includes:
 
 * Data preprocessing & feature engineering
 * Model training with MLflow tracking
+* Explainability using SHAP  
 * A user-friendly **Streamlit web application**
 
 ---
@@ -56,6 +82,10 @@ amazon-delivery-prediction/
 ├── app/
 │   └── app.py
 │
+├── assets/
+│ ├── feature_importance.png
+│ └── shap_summary.png
+│
 ├── mlruns/        # MLflow logs
 ├── requirements.txt
 └── README.md
@@ -66,7 +96,7 @@ amazon-delivery-prediction/
 ## ⚙️ Tech Stack
 
 * **Programming:** Python
-* **Libraries:** pandas, numpy, scikit-learn, xgboost
+* **Libraries:** pandas, numpy, scikit-learn, xgboost, shap
 * **Visualization:** matplotlib, seaborn
 * **Model Tracking:** MLflow
 * **Web App:** Streamlit
@@ -79,6 +109,7 @@ amazon-delivery-prediction/
 
 * Removed duplicates & missing values
 * Standardized categorical variables
+* Applied outlier handling (IQR method)  
 
 ### 2. Feature Engineering
 
@@ -95,7 +126,7 @@ amazon-delivery-prediction/
 ### 4. Model Development
 
 * Built regression models:
-
+  
   * Gradient Boosting
   * XGBoost (optional)
 * Used **Pipeline + ColumnTransformer**
@@ -108,8 +139,17 @@ amazon-delivery-prediction/
   * MAE (Mean Absolute Error)
   * RMSE (Root Mean Squared Error)
   * R² Score
+* Applied **5-fold Cross-Validation** 
 
-### 6. Experiment Tracking
+---
+
+### 6. Model Explainability
+
+- Used **SHAP (SHapley Additive Explanations)**  
+- Identified feature impact on predictions  
+- Visualized global feature importance 
+
+### 7. Experiment Tracking
 
 * Used **MLflow** to:
 
@@ -117,7 +157,7 @@ amazon-delivery-prediction/
   * Compare models
   * Track hyperparameters
 
-### 7. Deployment
+### 8. Deployment
 
 * Built interactive UI using **Streamlit**
 * Users can input delivery conditions and get predictions
@@ -172,6 +212,9 @@ streamlit run app/app.py
 * ✅ Feature engineering using geospatial data
 * ✅ Automated preprocessing with Pipeline
 * ✅ Hyperparameter tuning (GridSearchCV)
+* ✅ Cross-validation for robust evaluation  
+* ✅ Feature importance visualization  
+* ✅ SHAP-based explainability 
 * ✅ MLflow experiment tracking
 * ✅ Interactive Streamlit UI
 
@@ -198,6 +241,14 @@ streamlit run app/app.py
   * Traffic conditions
   * Preparation time
 
+### 🔍 Model Interpretability
+
+SHAP analysis revealed that:
+
+*  Distance is the most influential factor  
+*  Traffic conditions significantly impact delivery time  
+*  Preparation time strongly affects predictions 
+
 ---
 
 ## 🚀 Project Evolution
@@ -210,6 +261,8 @@ streamlit run app/app.py
 | v1.3 | Hyperparameter tuning | Better performance |
 | v1.4 | Code cleanup | Maintainability |
 | v1.5 | Feature importance | Interpretability |
+| v1.6 | Cross-validation | Robust evaluation |
+| v1.7 | SHAP explainability | Model transparency |
 
 ---
 
@@ -217,7 +270,6 @@ streamlit run app/app.py
 
 * Add real-time traffic API integration
 * Deploy on cloud (AWS / GCP)
-* Add SHAP for model explainability
 * Convert to REST API using FastAPI
 
 ---
